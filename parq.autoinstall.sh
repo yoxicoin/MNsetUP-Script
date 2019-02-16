@@ -181,7 +181,7 @@ fi
 cd ~
 rm -rf /usr/local/bin/parq*
 rm -rf daemon*
-wget https://github.com/yoxicoin/111/blob/master/daemon.zip
+wget https://github.com/yoxicoin/Parq/releases/download/1.0.0/daemon.zip
 unzip daemon.zip
 cd daemon/
 sudo chmod -R 755 parq-cli
