@@ -1,5 +1,5 @@
 #!/bin/bash
-# Parq Masternode Setup Script V1 for Ubuntu 16.04 LTS
+# PARQ Masternode Setup Script V1 for Ubuntu 16.04 LTS
 #
 # Script will attempt to autodetect primary public IP address
 # and generate masternode private key unless specified in command line
@@ -10,7 +10,7 @@
 
 #Color codes
 RED='\033[0;91m'
-GREEN='\033[1;32m'
+BLUE='\033[1;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
@@ -22,7 +22,7 @@ apt-get -qq install build-essential && apt-get -qq install libtool libevent-pthr
 function clear_stdin { while read -r -t 0; do read -r; done; }
 
 #Delay script execution for N seconds
-function delay { echo -e "${GREEN}Sleep for $1 seconds...${NC}"; sleep "$1"; }
+function delay { echo -e "${BLUE}Sleep for $1 seconds...${NC}"; sleep "$1"; }
 
 #Stop daemon if it's already running
 function stop_daemon {
@@ -47,7 +47,7 @@ function stop_daemon {
 genkey=$1
 clear
 
-echo -e "${GREEN} ------- Parq MASTERNODE INSTALLER v2.0.0--------+
+echo -e "${BLUE} ------- PARQ MASTERNODE INSTALLER v2.0.0--------+
  |                                                  |
  |                                                  |::
  |       The installation will install and run      |::
@@ -68,7 +68,7 @@ if [[ $DOSETUP =~ "n" ]] ; then
 
 #Confirming match
   if [ $genkey = $genkey2 ]; then
-     echo -e "${GREEN}MATCH! ${NC} \a" 
+     echo -e "${BLUE}MATCH! ${NC} \a" 
 else 
      echo -e "${RED} Error: Private keys do not match. Try again or let me generate one for you...${NC} \a";exit 1
 fi
@@ -92,9 +92,9 @@ else
 fi
 if [ -d "/var/lib/fail2ban/" ]; 
 then
-    echo -e "${GREEN}Packages already installed...${NC}"
+    echo -e "${BLUE}Packages already installed...${NC}"
 else
-    echo -e "${GREEN}Updating system and installing required packages...${NC}"
+    echo -e "${BLUE}Updating system and installing required packages...${NC}"
 
 sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
 sudo apt-get -y upgrade
@@ -119,7 +119,7 @@ sudo apt-get install libdb5.3++-dev libdb++-dev libdb5.3-dev libdb-dev && ldconf
    fi
 
 #Network Settings
-echo -e "${GREEN}Installing Network Settings...${NC}"
+echo -e "${BLUE}Installing Network Settings...${NC}"
 {
 sudo apt-get install ufw -y
 } &> /dev/null
@@ -160,7 +160,7 @@ rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
 #Create 2GB swap file
 if grep -q "SwapTotal" /proc/meminfo; then
-    echo -e "${GREEN}Skipping disk swap configuration...${NC} \n"
+    echo -e "${BLUE}Skipping disk swap configuration...${NC} \n"
 else
     echo -e "${YELLOW}Creating 2GB disk swap file. \nThis may take a few minutes!${NC} \a"
     touch /var/swap.img
@@ -170,7 +170,7 @@ else
     swapon /var/swap.img 2> /dev/null
     if [ $? -eq 0 ]; then
         echo '/var/swap.img none swap sw 0 0' >> /etc/fstab
-        echo -e "${GREEN}Swap was created successfully!${NC} \n"
+        echo -e "${BLUE}Swap was created successfully!${NC} \n"
     else
         echo -e "${RED}Operation not permitted! Optional swap was not created.${NC} \a"
         rm /var/swap.img
@@ -266,27 +266,27 @@ sleep 5
 cronjob="@reboot sleep 30 && parq"
 crontab -l > tempcron
 if ! grep -q "$cronjob" tempcron; then
-    echo -e "${GREEN}Configuring crontab job...${NC}"
+    echo -e "${BLUE}Configuring crontab job...${NC}"
     echo $cronjob >> tempcron
     crontab tempcron
 fi
 rm tempcron
 
 echo -e "========================================================================
-${GREEN}Masternode setup is complete!${NC}
+${BLUE}Masternode setup is complete!${NC}
 ========================================================================
-Masternode was installed with VPS IP Address: ${GREEN}$publicip${NC}
-Masternode Private Key: ${GREEN}$genkey${NC}
+Masternode was installed with VPS IP Address: ${BLUE}$publicip${NC}
+Masternode Private Key: ${BLUE}$genkey${NC}
 Now you can add the following string to the masternode.conf file 
 ======================================================================== \a"
-echo -e "${GREEN}parq_mn1 $publicip:$PORT $genkey TxId TxIdx${NC}"
+echo -e "${BLUE}parq_mn1 $publicip:$PORT $genkey TxId TxIdx${NC}"
 echo -e "========================================================================
 Use your mouse to copy the whole string above into the clipboard by
 tripple-click + single-click (Dont use Ctrl-C) and then paste it 
-into your ${GREEN}masternode.conf${NC} file and replace:
-    ${GREEN}parq_mn1${NC} - with your desired masternode name (alias)
-    ${GREEN}TxId${NC} - with Transaction Id from masternode outputs
-    ${GREEN}TxIdx${NC} - with Transaction Index (0 or 1)
+into your ${BLUE}masternode.conf${NC} file and replace:
+    ${BLUE}parq_mn1${NC} - with your desired masternode name (alias)
+    ${BLUE}TxId${NC} - with Transaction Id from masternode outputs
+    ${BLUE}TxIdx${NC} - with Transaction Index (0 or 1)
      Remember to save the masternode.conf and restart the wallet!
 To introduce your new masternode to the parq network, you need to
 issue a masternode start command from your wallet, which proves that
@@ -300,33 +300,33 @@ on the network. Eventually the 'Is Synced' status will change
 to 'true', which will indicate a comlete sync, although it may take
 from several minutes to several hours depending on the network state.
 Your initial Masternode Status may read:
-    ${GREEN}Node just started, not yet activated${NC} or
-    ${GREEN}Node  is not in masternode list${NC}, which is normal and expected.
+    ${BLUE}Node just started, not yet activated${NC} or
+    ${BLUE}Node  is not in masternode list${NC}, which is normal and expected.
 "
 clear_stdin
 read -p "*** Press any key to continue ***" -n1 -s
 
 echo -e "
-${GREEN}...scroll up to see previous screens...${NC}
+${BLUE}...scroll up to see previous screens...${NC}
 Here are some useful commands and tools for masternode troubleshooting:
 ========================================================================
 To view masternode configuration produced by this script in parq.conf:
-${GREEN}cat ~/.parq/parq.conf${NC}
+${BLUE}cat ~/.parq/parq.conf${NC}
 Here is your parq.conf generated by this script:
--------------------------------------------------${GREEN}"
-echo -e "${GREEN}parq_mn1 $publicip:$PORT $genkey TxId TxIdx${NC}"
+-------------------------------------------------${BLUE}"
+echo -e "${BLUE}parq_mn1 $publicip:$PORT $genkey TxId TxIdx${NC}"
 cat ~/.parq/parq.conf
 echo -e "${NC}-------------------------------------------------
 NOTE: To edit parq.conf, first stop the parqd daemon,
 then edit the parq.conf file and save it in nano: (Ctrl-X + Y + Enter),
 then start the parqd daemon back up:
-to stop:              ${GREEN}parq-cli stop${NC}
-to start:             ${GREEN}parqd${NC}
-to edit:              ${GREEN}nano ~/.parq/parq.conf${NC}
-to check mn status:   ${GREEN}parq-cli masternode status${NC}
+to stop:              ${BLUE}parq-cli stop${NC}
+to start:             ${BLUE}parqd${NC}
+to edit:              ${BLUE}nano ~/.parq/parq.conf${NC}
+to check mn status:   ${BLUE}parq-cli masternode status${NC}
 ========================================================================
 To monitor system resource utilization and running processes:
-                   ${GREEN}htop${NC}
+                   ${BLUE}htop${NC}
 ========================================================================
 "
 sleep 10
